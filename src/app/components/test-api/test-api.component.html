@@ -1,0 +1,27 @@
+<mat-card>
+    <mat-card-content>
+        <mat-form-field>
+            <mat-label>Add a new number:</mat-label>
+            <input matInput [(ngModel)]="number">
+        </mat-form-field>
+        <button mat-raised-button
+                color="accent"
+                extended
+                (click)="addNumber()">
+            <mat-icon>add</mat-icon>
+            Add
+        </button>
+    </mat-card-content>
+
+    <mat-card-content>
+        <table mat-table [dataSource]="numbers">
+            <ng-container matColumnDef="number">
+                <mat-header-cell *matHeaderCellDef> Number </mat-header-cell>
+                <mat-cell *matCellDef="let value"> {{ value }} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </table>
+    </mat-card-content>
+</mat-card>

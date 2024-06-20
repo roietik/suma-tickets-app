@@ -1,5 +1,12 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+  "include": [
+    "src",
+    "node_modules/cypress"
+  ],
+  "exclude": [
+    "node_modules/cypress"
+  ],
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
@@ -21,7 +28,9 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

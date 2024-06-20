@@ -5,7 +5,18 @@
   "projects": {
     "angular-server": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+				"@schematics/angular:component": {
+					"style": "scss",
+					"standalone": false
+				},
+				"@schematics/angular:directive": {
+					"standalone": false
+				},
+				"@schematics/angular:pipe": {
+					"standalone": false
+				}
+			},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -13,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-server",
+            "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -25,17 +36,24 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+							"@angular/material/prebuilt-themes/deeppurple-amber.css",
+							"src/styles.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -84,12 +102,26 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+							"@angular/material/prebuilt-themes/deeppurple-amber.css",
+							"src/styles.css"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "eslintConfig": ".eslintrc.json",
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

@@ -1,0 +1,13 @@
+npm-debug.log
+Dockerfile*
+.editorconfig
+docker-compose*
+.dockerignore
+.gitignore
+README.md
+LICENSE
+.vscode
+angular/
+node_modules
+.git
+
