@@ -2,7 +2,7 @@
     <mat-card-content>
         <mat-form-field>
             <mat-label>Add a new number:</mat-label>
-            <input matInput [(ngModel)]="number">
+            <input matInput [(ngModel)]="value">
         </mat-form-field>
         <button mat-raised-button
                 color="accent"
@@ -12,12 +12,11 @@
             Add
         </button>
     </mat-card-content>
-
     <mat-card-content>
-        <table mat-table [dataSource]="numbers">
+        <table mat-table [dataSource]="values">
             <ng-container matColumnDef="number">
                 <mat-header-cell *matHeaderCellDef> Number </mat-header-cell>
-                <mat-cell *matCellDef="let value"> {{ value }} </mat-cell>
+                <mat-cell *matCellDef="let value"> {{ value.number }} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

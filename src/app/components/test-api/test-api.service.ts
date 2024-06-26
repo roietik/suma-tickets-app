@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import {Value} from './test-api.component';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class TestApiService {
   configUrl = '/api';
 
   getValues() {
-    return this.http.get<number[]>(`${this.configUrl}/values/all`);
+    return this.http.get<Value[]>(`${this.configUrl}/values/all`);
   }
 
-  addValue(value: number): Observable<object> {
-    return this.http.post(`${this.configUrl}/values`, { value })
+  addValue(value: Value): Observable<Value[]> {
+    return this.http.post<Value[]>(`${this.configUrl}/values`, { value })
       .pipe(
         catchError(err => { return this.handleError(err) })
       );

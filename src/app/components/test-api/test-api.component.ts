@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {TestApiService} from './test-api.service';
-import {finalize, switchMap} from 'rxjs';
+import {finalize} from 'rxjs';
+
+export interface Value {
+  number: number
+}
 
 @Component({
   selector: 'test-api',
@@ -8,8 +12,8 @@ import {finalize, switchMap} from 'rxjs';
   styleUrl: './test-api.component.scss'
 })
 export class TestApiComponent implements OnInit {
-  numbers!: number[];
-  number!: number | null;
+  values!: Value[];
+  value!: Value | null;
   displayedColumns: string[] = ['number'];
 
   constructor(
@@ -23,26 +27,23 @@ export class TestApiComponent implements OnInit {
 
   private getNumbers () {
     this.testApiService.getValues()
-      .subscribe((data: number[]) => {
-        this.numbers = data;
+      .subscribe((data: Value[]) => {
+        this.values = data;
       });
   }
 
   addNumber () {
-    if (!this.number) {
+    if (!this.value) {
       return;
     }
-    this.testApiService.addValue(this.number)
+    this.testApiService.addValue(this.value)
       .pipe(
-        switchMap(() => {
-          return this.testApiService.getValues();
-        }),
         finalize(() => {
-          this.number = null
+          this.value = null
         })
       )
       .subscribe((response) => {
-        this.numbers = response;
+        this.values = response;
       });
   }
 }
