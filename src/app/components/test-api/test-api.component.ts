@@ -1,23 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {TestApiService} from './test-api.service';
-import {finalize} from 'rxjs';
-
-export interface Value {
-  number: number
-}
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {TestApiService, Value} from './test-api.service';
+import {finalize, Subject, takeUntil} from 'rxjs';
+import {ConfirmDialogService} from '../confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'test-api',
   templateUrl: './test-api.component.html',
   styleUrl: './test-api.component.scss'
 })
-export class TestApiComponent implements OnInit {
+export class TestApiComponent implements OnInit, OnDestroy {
   values!: Value[];
   value!: Value | null;
-  displayedColumns: string[] = ['number'];
+  displayedColumns: string[] = ['id', 'value', 'actions'];
+  destroy: Subject<void> = new Subject<void>();
 
   constructor(
-    private readonly testApiService: TestApiService
+    private readonly testApiService: TestApiService,
+    private readonly confirmDialogService: ConfirmDialogService
   ){
   }
 
@@ -32,7 +31,7 @@ export class TestApiComponent implements OnInit {
       });
   }
 
-  addNumber () {
+  addValue() {
     if (!this.value) {
       return;
     }
@@ -45,5 +44,27 @@ export class TestApiComponent implements OnInit {
       .subscribe((response) => {
         this.values = response;
       });
+  }
+
+  openConfirmationDialog(id: number) {
+    this.confirmDialogService.openConfirmationDialog()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((result: boolean): void => {
+        if (!result) {
+          return;
+        }
+        this.deleteValue(id);
+      });
+  }
+
+  private deleteValue(id: number): void {
+    this.testApiService.deleteValue(id)
+      .subscribe((response) => {
+        this.values = response;
+      })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
   }
 }

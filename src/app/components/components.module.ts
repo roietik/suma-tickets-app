@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {TestApiComponent} from './test-api.component';
+import {TestApiComponent} from './test-api/test-api.component';
 import {FormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
@@ -16,10 +16,14 @@ import {
   MatHeaderRowDef, MatRow, MatRowDef,
   MatTable
 } from '@angular/material/table';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog'; // Import for MatDialog
+
 
 @NgModule({
   declarations: [
-    TestApiComponent
+    TestApiComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     FormsModule,
@@ -41,11 +45,13 @@ import {
     MatRow,
     MatHeaderRow,
     MatCardContent,
-    MatButton
+    MatButton,
+    MatDialogModule
   ],
   exports: [
-    TestApiComponent
+    TestApiComponent,
+    ConfirmDialogComponent
   ]
 })
-export class TestApiModule {
+export class ComponentsModule {
 }
