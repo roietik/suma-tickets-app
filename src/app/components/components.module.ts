@@ -17,13 +17,15 @@ import {
   MatTable
 } from '@angular/material/table';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog'; // Import for MatDialog
+import { MatDialogModule } from '@angular/material/dialog';
+import { UserFormComponent } from './user-form/user-form.component'; // Import for MatDialog
 
 
 @NgModule({
   declarations: [
     TestApiComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    UserFormComponent
   ],
   imports: [
     FormsModule,
@@ -50,7 +52,8 @@ import { MatDialogModule } from '@angular/material/dialog'; // Import for MatDia
   ],
   exports: [
     TestApiComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    UserFormComponent
   ]
 })
 export class ComponentsModule {
