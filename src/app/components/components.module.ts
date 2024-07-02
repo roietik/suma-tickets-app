@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {TestApiComponent} from './test-api/test-api.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgForOf} from '@angular/common';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
@@ -18,14 +18,16 @@ import {
 } from '@angular/material/table';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { UserFormComponent } from './user-form/user-form.component'; // Import for MatDialog
+import { UserFormComponent } from './user-form/user-form.component';
+import {UserListComponent} from './user-list/user-list.component';
 
 
 @NgModule({
   declarations: [
     TestApiComponent,
     ConfirmDialogComponent,
-    UserFormComponent
+    UserFormComponent,
+    UserListComponent
   ],
   imports: [
     FormsModule,
@@ -48,12 +50,14 @@ import { UserFormComponent } from './user-form/user-form.component'; // Import f
     MatHeaderRow,
     MatCardContent,
     MatButton,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule
   ],
   exports: [
     TestApiComponent,
     ConfirmDialogComponent,
-    UserFormComponent
+    UserFormComponent,
+    UserListComponent
   ]
 })
 export class ComponentsModule {

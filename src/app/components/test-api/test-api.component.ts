@@ -59,6 +59,7 @@ export class TestApiComponent implements OnInit, OnDestroy {
 
   private deleteValue(id: number): void {
     this.testApiService.deleteValue(id)
+      .pipe(takeUntil(this.destroy))
       .subscribe((response) => {
         this.values = response;
       })

@@ -29,7 +29,9 @@ export class TestApiService {
   }
 
   deleteValue(id: number): Observable<Value[]> {
-    return this.http.delete<Value[]>(`${this.configUrl}/values/${id}`)
+    const url = `${this.configUrl}/values/${id}`;
+    console.log('url', url);
+    return this.http.delete<Value[]>(url)
       .pipe(
         catchError(err => this.handleError(err))
       );

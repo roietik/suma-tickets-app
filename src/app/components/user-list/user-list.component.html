@@ -1,0 +1,3 @@
+<div *ngFor="let user of users">
+    <pre>{{ user.firstname }}, {{ user.lastname }}, {{ user.email }} <button (click)="removeUser(user.id)">remove</button></pre>
+</div>
