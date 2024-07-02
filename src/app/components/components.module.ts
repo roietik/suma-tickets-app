@@ -20,6 +20,7 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserFormComponent } from './user-form/user-form.component';
 import {UserListComponent} from './user-list/user-list.component';
+import {TicketComponent} from './ticket/ticket.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {UserListComponent} from './user-list/user-list.component';
     TestApiComponent,
     ConfirmDialogComponent,
     UserFormComponent,
-    UserListComponent
+    UserListComponent,
+    TicketComponent
   ],
   imports: [
     FormsModule,
@@ -57,7 +59,8 @@ import {UserListComponent} from './user-list/user-list.component';
     TestApiComponent,
     ConfirmDialogComponent,
     UserFormComponent,
-    UserListComponent
+    UserListComponent,
+    TicketComponent
   ]
 })
 export class ComponentsModule {
