@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import {TestApiComponent} from './test-api/test-api.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgOptimizedImage} from '@angular/common';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatButton, MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {
   MatCell,
   MatCellDef,
@@ -21,15 +20,17 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { UserFormComponent } from './user-form/user-form.component';
 import {UserListComponent} from './user-list/user-list.component';
 import {TicketComponent} from './ticket/ticket.component';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {AdminComponent} from './admin/admin.component';
 
 
 @NgModule({
   declarations: [
-    TestApiComponent,
     ConfirmDialogComponent,
     UserFormComponent,
     UserListComponent,
-    TicketComponent
+    TicketComponent,
+    AdminComponent
   ],
   imports: [
     FormsModule,
@@ -53,14 +54,18 @@ import {TicketComponent} from './ticket/ticket.component';
     MatCardContent,
     MatButton,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCheckbox,
+    MatCardHeader,
+    MatCardTitle,
+    NgOptimizedImage
   ],
   exports: [
-    TestApiComponent,
     ConfirmDialogComponent,
     UserFormComponent,
     UserListComponent,
-    TicketComponent
+    TicketComponent,
+    AdminComponent
   ]
 })
 export class ComponentsModule {

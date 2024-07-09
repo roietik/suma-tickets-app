@@ -1,22 +1,33 @@
 <div class="user-form">
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>
+                <img width="564" src="../../../assets/cover.jpg" alt="Cover suma 2024">
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form class="form-container" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Imię</mat-label>
+                    <input matInput type="text" formControlName="firstName" placeholder="Wpisz imię">
+                </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Imię</mat-label>
-            <input matInput type="text" formControlName="firstName" placeholder="Wpisz imię">
-        </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Nazwisko</mat-label>
+                    <input matInput type="text" formControlName="lastName" placeholder="Wpisz nazwisko">
+                </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Nazwisko</mat-label>
-            <input matInput type="text" formControlName="lastName" placeholder="Wpisz nazwisko">
-        </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="Wpisz email">
+                </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="Wpisz email">
-        </mat-form-field>
+                <mat-checkbox formControlName="statute">
+                    <a href="../../../assets/regulamin.pdf" target="_blank">Regulamin</a>
+                </mat-checkbox>
 
-        <button mat-raised-button color="primary" [disabled]="userForm.invalid" type="submit">Wygeneruj bilet</button>
-    </form>
-    <button mat-raised-button color="primary" (click)="sendMail()" type="submit">Wyślij maila</button>
+                <button type="submit" mat-raised-button color="primary" [disabled]="userForm.invalid">Wygeneruj bilet</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
 </div>

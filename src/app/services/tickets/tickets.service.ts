@@ -37,7 +37,6 @@ export class TicketsService {
   }
 
   getTicket(ticketConfig: TicketConfig): Observable<string | null> {
-    console.log('ticketConfig', ticketConfig);
     return this.getUniqueTicketId()
       .pipe(
         map((uniqueId) => {
@@ -50,7 +49,7 @@ export class TicketsService {
       )
   }
 
-  private getUniqueTicketId(): Observable<string> {
+  getUniqueTicketId(): Observable<string> {
     return this.httpClient.get<string>(`${this.CONFIG_URL}${this.TICKETS_ROUTE}/unique-id`);
   }
 

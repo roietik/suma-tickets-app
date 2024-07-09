@@ -11,7 +11,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   TICKET_TITLE = "Suma Bilet 2024";
-  TICKET_DESCRIPTION = 'Lorem...';
+  TICKET_DESCRIPTION = '';
 
   userForm!: FormGroup;
   user!: User;
@@ -31,14 +31,17 @@ export class UserFormComponent implements OnInit, OnDestroy {
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
+      statute: new FormControl('', Validators.required)
     });
 
     this.userForm.valueChanges
       .pipe(
         takeUntil(this.destroy)
       )
-      .subscribe((fields) => {
-        console.log('user', this.user);
+      .subscribe((response) => {
+        const fields = response;
+        delete fields.statute;
+
         this.user = fields;
       });
   }
@@ -62,12 +65,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
           return this.usersService.create(payload as User);
         }),
         switchMap(() => {
-          return this.sendMailObs();
-        })
+          return this.sendMail();
+        }),
+        takeUntil(this.destroy)
       )
-      .subscribe((response) => {
-        console.log('response', response);
-      });
+      .subscribe();
   }
 
   private getTicket(): Observable<string | null> {
@@ -82,19 +84,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private sendMailObs(): Observable<string> {
+  private sendMail(): Observable<string> {
     return this.http.post<string>(`/api/emails`, {
       email: 'radoslaw.grzymala@hotmail.com',
       ticketBase64: this.base64
-    });
-  }
-
-  sendMail(): void {
-    this.http.post<string>(`/api/emails`, {
-      email: 'radoslaw.grzymala@hotmail.com',
-      ticketBase64: null
-    }).subscribe((response) => {
-      console.log('response', response);
     });
   }
 
