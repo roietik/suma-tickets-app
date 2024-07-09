@@ -5,8 +5,8 @@ import {catchError} from 'rxjs/operators';
 
 export interface User {
   id: number;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   ticketBase64: string;
 }
