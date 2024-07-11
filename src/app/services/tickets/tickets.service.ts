@@ -7,6 +7,8 @@ import {TICKET_IMAGE_BASE64} from './image-base64';
 import {concat, map, Observable, of, switchMap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
+import {API_CONFIG} from '../services.interface';
+import {HandleErrorService} from '../handle-error/handle-error.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export interface TicketConfig {
@@ -26,13 +28,12 @@ export interface DocumentConfig extends TicketConfig {
   providedIn: 'root'
 })
 export class TicketsService {
-  readonly CONFIG_URL = '/api';
-  readonly TICKETS_ROUTE = '/tickets';
   readonly TICKET_NUMBER_PREFIX = 'SUMA-24';
   readonly TICKET_FILE_NAME = 'ticket-suma-2024';
 
   constructor(
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly handleErrorService: HandleErrorService
   ) {
   }
 
@@ -45,12 +46,16 @@ export class TicketsService {
         }),
         switchMap((pdfConfig) => {
           return this.getDocument(pdfConfig);
-        })
+        }),
+        catchError((response) => this.handleErrorService.get(response))
       )
   }
 
   getUniqueTicketId(): Observable<string> {
-    return this.httpClient.get<string>(`${this.CONFIG_URL}${this.TICKETS_ROUTE}/unique-id`);
+    return this.httpClient.get<string>(`${API_CONFIG.TICKETS}/unique-id`)
+      .pipe(
+        catchError((response) => this.handleErrorService.get(response))
+      );
   }
 
   private getDocument(documentConfig: DocumentConfig): Observable<string | null> {
@@ -61,7 +66,10 @@ export class TicketsService {
         ? this.getDocumentBase64(documentConfig)
         : of();
 
-    return concat(download$, base64$);
+    return concat(download$, base64$)
+      .pipe(
+        catchError((response) => this.handleErrorService.get(response))
+      );
   }
 
   private getDocumentDownload(documentConfig: DocumentConfig): Observable<string | null> {
@@ -90,7 +98,9 @@ export class TicketsService {
         observer.error(error);
       }
     })
-      .pipe(catchError(() => of(null)));
+      .pipe(
+        catchError((response) => this.handleErrorService.get(response))
+      );
   }
 
   private createDocumentDefinition(documentConfig: DocumentConfig): TDocumentDefinitions {
@@ -173,5 +183,45 @@ export class TicketsService {
       lowerBound: number = Math.pow(10, numberOfDigits - 1);
 
     return Math.floor(Math.random() * (upperBound - lowerBound + 1)) + lowerBound;
+  }
+
+  setTicketsLimit(ticketsLimit: number): Observable<{ticketsLimit: string}> {
+    return this.httpClient.post<{ticketsLimit: string}>(`${API_CONFIG.TICKETS}/limit`, {
+      ticketsLimit: ticketsLimit
+    })
+      .pipe(
+        catchError((response) => this.handleErrorService.get(response))
+      );
+  }
+
+  getTicketsLimit(): Observable<number> {
+    return this.httpClient.get<string>(`${API_CONFIG.TICKETS}/limit`)
+      .pipe(
+        map((response) => Number(response)),
+        catchError((response) => this.handleErrorService.get(response))
+      );
+  }
+
+  setTicketsSoldOut(ticketsSoldOut: boolean): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${API_CONFIG.TICKETS}/sold-out`, {
+      ticketsSoldOut: ticketsSoldOut
+    }).pipe(
+      catchError((response) => this.handleErrorService.get(response))
+    );
+  }
+
+  getTicketsSoldOut(): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${API_CONFIG.TICKETS}/sold-out`)
+      .pipe(
+        catchError((response) => this.handleErrorService.get(response))
+      );
+  }
+
+  getTicketsCount(): Observable<number> {
+    return this.httpClient.get<string>(`${API_CONFIG.TICKETS}/count`)
+      .pipe(
+        map((response) => Number(response)),
+        catchError((response) => this.handleErrorService.get(response))
+      );
   }
 }
