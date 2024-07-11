@@ -1,14 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TicketsService} from '../../services/tickets/tickets.service';
+import {FormControl, FormGroup} from '@angular/forms';
+import {forkJoin, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
-  generatedTickets = 0;
-  maxTickets = 500;
+export class AdminComponent implements OnInit, OnDestroy {
+  adminForm!: FormGroup;
+
+  ticketsCount!: number;
+  ticketsLimit!: number;
+  ticketsSoldOut!: boolean;
+
+  destroy: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly ticketsService: TicketsService
@@ -16,23 +23,44 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-     this.ticketsService.getUniqueTicketId()
-      .pipe()
-      .subscribe((response) => {
-        console.log('response', response);
-        this.generatedTickets = Number(response) - 1;
+    this.adminForm = new FormGroup({
+      ticketLimit: new FormControl()
+    })
+
+    this.adminForm.valueChanges
+      .pipe(takeUntil(this.destroy))
+      .subscribe((fields) => {
+        this.ticketsLimit = fields.ticketLimit;
       });
 
+    forkJoin([
+      this.ticketsService.getTicketsLimit(),
+      this.ticketsService.getTicketsCount(),
+      this.ticketsService.getTicketsSoldOut()
+    ])
+      .pipe(takeUntil(this.destroy))
+      .subscribe(([ticketsLimit, ticketsCount, ticketsSoldOut]): void => {
+        this.ticketsLimit = ticketsLimit;
+        this.ticketsCount = ticketsCount;
+        this.ticketsSoldOut = ticketsSoldOut;
+      });
   }
 
-  generateTicket(): void {
-    if (this.generatedTickets >= this.maxTickets) {
-      console.warn('Ticket generation limit reached (500 tickets).');
-      return;
-    }
+  setTicketsLimit(): void {
+    this.ticketsService.setTicketsLimit(this.ticketsLimit)
+      .pipe(takeUntil(this.destroy))
+      .subscribe();
+  }
 
-    // Perform ticket generation logic here (e.g., call an API, update local storage, etc.)
-    console.log('Ticket generated:', this.generatedTickets + 1);
-    this.generatedTickets++;
+  setTicketsSoldOut(soldOut: boolean): void {
+    this.ticketsService.setTicketsSoldOut(soldOut)
+      .pipe(takeUntil(this.destroy))
+      .subscribe((response) => {
+        this.ticketsSoldOut = response;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
   }
 }

@@ -1,2 +1,33 @@
-<p>admin works!</p>
-<pre>{{generatedTickets}} of {{maxTickets}}</pre>
+<div class="user-form">
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>
+                <img width="564" src="../../../assets/cover.jpg" alt="Cover suma 2024">
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <h2>Wygenerowano: {{ ticketsCount }} z {{ ticketsLimit }}</h2>
+
+            <form class="form-container" [formGroup]="adminForm" (ngSubmit)="setTicketsLimit()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Limit</mat-label>
+                    <input matInput type="number" formControlName="ticketLimit" placeholder="limit">
+                </mat-form-field>
+
+                <button type="submit"
+                        mat-raised-button
+                        color="primary">
+                    Ustaw limit
+                </button>
+            </form>
+        </mat-card-content>
+        <mat-card-content>
+            <button mat-raised-button
+                    color="primary"
+                    (click)="ticketsSoldOut ? setTicketsSoldOut(false) : setTicketsSoldOut(true)">
+                {{ticketsSoldOut ? 'Odblokuj' : 'Zablokuj'}} generowanie
+            </button>
+        </mat-card-content>
+    </mat-card>
+</div>
+
