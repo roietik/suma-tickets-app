@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {API_CONFIG} from '../services.interface';
 import {catchError} from 'rxjs/operators';
+import {HandleErrorService} from '../handle-error/handle-error.service';
 
 export interface User {
   id: number;
@@ -15,42 +17,40 @@ export interface User {
   providedIn: 'root'
 })
 export class UsersService {
-
   constructor(
-    private readonly http: HttpClient
-  ) { }
-  USERS_ROUTE = '/users';
-  CONFIG_URL = '/api';
+    private readonly httpClient: HttpClient,
+    private readonly handleErrorService: HandleErrorService
+  ) {
+  }
 
   getAll(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.CONFIG_URL}${this.USERS_ROUTE}`)
+    return this.httpClient.get<User[]>(API_CONFIG.USERS)
       .pipe(
-        catchError(err => this.handleError(err))
+        catchError((response) => this.handleErrorService.get(response))
       );
   }
 
-  create(user: User): Observable<User[]> {
-    return this.http.post<User[]>(`${this.CONFIG_URL}${this.USERS_ROUTE}`, { ...user })
+  create(user: User): Observable<User> {
+    return this.httpClient.post<User>(API_CONFIG.USERS, { ...user })
       .pipe(
-        catchError(err => this.handleError(err))
+        catchError((response) => this.handleErrorService.get(response))
       );
   }
 
   remove(id: number): void {
-    const url = `${this.CONFIG_URL}${this.USERS_ROUTE}/${id}`;
-    this.http.delete<User[]>(url)
+    this.httpClient.delete<User[]>(`${API_CONFIG.USERS}/${id}`)
       .pipe(
-        catchError(err => this.handleError(err))
-      ).subscribe();
+        catchError((response) => this.handleErrorService.get(response))
+      )
+      .subscribe();
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      console.error('An error occurred:', error.error);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
-    }
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+  isEmailExist(email: string): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${API_CONFIG.USERS}/is-email-exist`, {
+      email: email
+    })
+      .pipe(
+        catchError((response) => this.handleErrorService.get(response))
+      );
   }
 }
