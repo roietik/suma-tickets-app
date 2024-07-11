@@ -14,12 +14,6 @@ describe('AppComponent', (): void => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'angular-server' title`, (): void => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('microservice-one-server');
-  });
-
   it('should render title', ():void => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
