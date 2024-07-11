@@ -7,7 +7,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatIcon} from '@angular/material/icon';
-import {MatFabButton} from '@angular/material/button';
+import {MatButton, MatFabButton} from '@angular/material/button';
 import {
   MatCard,
   MatCardContent,
@@ -16,6 +16,11 @@ import {
   MatCardSubtitle,
   MatCardTitle
 } from '@angular/material/card';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {ViewsModule} from './views/views.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +31,7 @@ import {
     AppRoutingModule,
     HttpClientModule,
     ComponentsModule,
+    ViewsModule,
     MatSlideToggle,
     MatIcon,
     MatFabButton,
@@ -34,7 +40,14 @@ import {
     MatCardContent,
     MatCardHeader,
     MatCardFooter,
-    MatCardSubtitle
+    MatCardSubtitle,
+    FormsModule,
+    MatButton,
+    MatCheckbox,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule
   ],
   providers: [
     provideAnimationsAsync()

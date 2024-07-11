@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AdminComponent} from './components/admin/admin.component';
-import {UserFormComponent} from './components/user-form/user-form.component';
+import {AdminViewComponent} from './views/admin-view/admin-view.component';
+import {TicketViewComponent} from './views/ticket-view/ticket-view.component';
+import {LoginComponent} from './components/login/login.component';
 
 export const routes: Routes = [
-  { path: 'admin', component: AdminComponent },
-  { path: 'ticket', component: UserFormComponent },
-  { path: '',   redirectTo: '/ticket', pathMatch: 'full' }
+  { path: 'admin', component: AdminViewComponent },
+  { path: 'ticket', component: TicketViewComponent },
+  { path: 'login', component: LoginComponent },
+  { path: '',   redirectTo: '/ticket', pathMatch: 'full' },
 ];
 
 @NgModule({

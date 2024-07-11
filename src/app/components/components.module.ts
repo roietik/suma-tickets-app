@@ -3,7 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {
@@ -21,14 +21,20 @@ import { UserFormComponent } from './user-form/user-form.component';
 import {UserListComponent} from './user-list/user-list.component';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {AdminComponent} from './admin/admin.component';
-
+import {LoginComponent} from './login/login.component';
+import {TopMenuComponent} from './top-menu/top-menu.component';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatGridList, MatGridTile} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
     UserFormComponent,
     UserListComponent,
-    AdminComponent
+    AdminComponent,
+    LoginComponent,
+    TopMenuComponent
   ],
   imports: [
     FormsModule,
@@ -57,13 +63,20 @@ import {AdminComponent} from './admin/admin.component';
     MatCardHeader,
     MatCardTitle,
     NgOptimizedImage,
-    NgIf
+    NgIf,
+    MatToolbar,
+    MatIconButton,
+    MatTooltip,
+    MatGridList,
+    MatGridTile
   ],
   exports: [
     ConfirmDialogComponent,
     UserFormComponent,
     UserListComponent,
-    AdminComponent
+    AdminComponent,
+    LoginComponent,
+    TopMenuComponent
   ]
 })
 export class ComponentsModule {

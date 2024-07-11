@@ -1,0 +1,22 @@
+<div class="login-form">
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <h1>Logowanie</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <form class="form-container" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="Wpisz email">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" formControlName="password" placeholder="Wpisz hasło">
+                </mat-form-field>
+
+                <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Zaloguj się</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
