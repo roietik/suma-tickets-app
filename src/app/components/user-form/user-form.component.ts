@@ -1,28 +1,34 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormGroupDirective, Validators} from '@angular/forms';
 import {User, UsersService} from '../../services/users/users.service';
-import {Observable, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {forkJoin, Observable, of, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {TicketsService} from '../../services/tickets/tickets.service';
-import {HttpClient} from '@angular/common/http';
+import {EmailsService, SendEmail} from '../../services/emails/emails.service';
+import {NotifyService} from '../../services/notify/notify.service';
+
 @Component({
   selector: 'user-form',
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss'
 })
 export class UserFormComponent implements OnInit, OnDestroy {
+
   TICKET_TITLE = "Suma Bilet 2024";
   TICKET_DESCRIPTION = '';
 
   userForm!: FormGroup;
   user!: User;
-  base64!: string | null;
+  base64!: string;
+  isTicketsLimit!: boolean;
+  isTicketsSoldOut!: boolean;
 
   private readonly destroy: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly usersService: UsersService,
     private readonly ticketsService: TicketsService,
-    private readonly http: HttpClient
+    private readonly emailsService: EmailsService,
+    private readonly notifyService: NotifyService
   ) {
   }
 
@@ -41,39 +47,79 @@ export class UserFormComponent implements OnInit, OnDestroy {
       .subscribe((response) => {
         const fields = response;
         delete fields.statute;
-
         this.user = fields;
+      });
+
+    forkJoin([
+      this.ticketsService.getTicketsSoldOut(),
+      this.ticketsService.getTicketsCount(),
+      this.ticketsService.getTicketsLimit(),
+    ])
+      .pipe(takeUntil(this.destroy))
+      .subscribe(([ticketsSoldOut, ticketsCount, ticketsLimit]): void => {
+        this.ticketGenerationAvailability(ticketsCount, ticketsLimit, ticketsSoldOut);
       });
   }
 
-  onSubmit() {
+  private ticketGenerationAvailability(ticketsCount: number, ticketsLimit: number, ticketsSoldOut: boolean): void {
+    this.isTicketsLimit = ticketsCount >= ticketsLimit;
+    this.isTicketsSoldOut = ticketsSoldOut;
+    this.updateFormState(this.isTicketsLimit, this.isTicketsSoldOut);
+  }
+
+  private updateFormState(isTicketsLimit: boolean, isTicketsSoldOut: boolean): void {
+    if (isTicketsLimit || isTicketsSoldOut) {
+      this.userForm.controls['firstName'].disable();
+      this.userForm.controls['lastName'].disable();
+      this.userForm.controls['email'].disable();
+      this.userForm.controls['statute'].disable();
+      return;
+    }
+    this.userForm.controls['firstName'].enable();
+    this.userForm.controls['lastName'].enable();
+    this.userForm.controls['email'].enable();
+    this.userForm.controls['statute'].enable();
+  }
+
+  onSubmit(formDirective: FormGroupDirective): void {
     if (this.userForm.invalid) {
-      console.error('Form is invalid');
       return;
     }
 
-    this.getTicket()
+    this.usersService.isEmailExist(this.user.email)
       .pipe(
-        tap((base64) => {
+        switchMap((isEmailExist): Observable<null> | Observable<string> => {
+          if (isEmailExist) {
+            return of(null);
+          }
+          return this.getTicket()
+        }),
+        tap((base64): void => {
+          if (!base64) {
+            return;
+          }
           this.base64 = base64;
         }),
-        switchMap(() => {
-          const payload = {
+        switchMap((): Observable<User> => {
+          const payload: User = {
             ...this.user,
             ticketBase64: this.base64
           };
-          return this.usersService.create(payload as User);
+          return this.usersService.create(payload);
         }),
-        switchMap(() => {
-          return this.sendMail();
+        switchMap((): Observable<SendEmail> => {
+          return this.sendMail(this.user.email, this.base64);
         }),
         takeUntil(this.destroy)
       )
-      .subscribe();
+      .subscribe((response): void => {
+        this.notifyService.notifySuccess(response.message);
+        formDirective.resetForm();
+      });
   }
 
-  private getTicket(): Observable<string | null> {
-    return this.ticketsService.getTicket({
+  private getTicket(): Observable<string> {
+    return <Observable<string>>this.ticketsService.getTicket({
       title: this.TICKET_TITLE,
       description: this.TICKET_DESCRIPTION,
       firstName: this.user.firstName,
@@ -84,11 +130,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private sendMail(): Observable<string> {
-    return this.http.post<string>(`/api/emails`, {
-      email: 'radoslaw.grzymala@hotmail.com',
-      ticketBase64: this.base64
-    });
+  private sendMail(email: string, base64: string): Observable<SendEmail> {
+    return this.emailsService.sendMail(email, base64);
   }
 
   ngOnDestroy(): void {

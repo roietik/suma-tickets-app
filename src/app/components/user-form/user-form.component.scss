@@ -9,6 +9,10 @@
   .form-container {
     display: flex;
     flex-direction: column;
+
+    .form-alert {
+      color: #ec223e
+    }
   }
 
   > * {
