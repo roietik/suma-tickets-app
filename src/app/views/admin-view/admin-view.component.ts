@@ -7,14 +7,14 @@ import {ActivatedRoute} from '@angular/router';
   styleUrl: './admin-view.component.scss'
 })
 export class AdminViewComponent implements  OnInit {
-  tokenId!: number;
+  isToken!: boolean;
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private readonly activatedRoute: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
-    this.tokenId = this.activatedRoute.snapshot.data['tokenId'];
+    this.isToken = this.activatedRoute.snapshot.data['token'];
   }
 }

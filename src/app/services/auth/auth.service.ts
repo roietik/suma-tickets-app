@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {map, Observable, of} from 'rxjs';
 import {API_CONFIG, ResponseMessage} from '../services.interface';
 import {catchError} from 'rxjs/operators';
 import {HandleErrorService} from '../handle-error/handle-error.service';
 import {User} from '../users/users.service';
+import {Router} from '@angular/router';
 
 export interface UserLogin {
   email: string;
@@ -18,7 +19,8 @@ export class AuthService {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly handleErrorService: HandleErrorService
+    private readonly handleErrorService: HandleErrorService,
+    private readonly router: Router
   ) {
   }
 
@@ -38,12 +40,20 @@ export class AuthService {
       );
   }
 
-  getToken(): Observable<User> {
+  getToken(): Observable<boolean> {
     return this.httpClient.get<User>(API_CONFIG.TOKEN, {
       withCredentials: true
     })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((error) => {
+          if (error.status === 404 || error.status === 401) {
+            this.router.navigate(['./login']);
+            return of(null);
+          }
+          this.handleErrorService.get(error);
+          throw Error(error);
+        }),
+        map((token) => !!token)
       );
   }
- }
+}

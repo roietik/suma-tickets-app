@@ -1,11 +1,4 @@
-<div class="admin-view" >
+<div class="admin-view" *ngIf="isToken">
     <top-menu/>
-
-    <ng-container *ngIf="!tokenId">
-        <login/>
-    </ng-container>
-
-    <ng-container *ngIf="tokenId">
-        <admin/>
-    </ng-container>
+    <admin/>
 </div>

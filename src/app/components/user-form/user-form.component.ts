@@ -19,8 +19,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   user!: User;
   base64!: string;
-  isTicketsLimit!: boolean;
-  isTicketsSoldOut!: boolean;
+  isTicketsLimit = false;
+  isTicketsSoldOut = false;
 
   private readonly destroy: Subject<void> = new Subject<void>();
 
@@ -51,12 +51,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
       });
 
     forkJoin([
-      this.ticketsService.getTicketsSoldOut(),
       this.ticketsService.getTicketsCount(),
       this.ticketsService.getTicketsLimit(),
+      this.ticketsService.getTicketsSoldOut()
     ])
       .pipe(takeUntil(this.destroy))
-      .subscribe(([ticketsSoldOut, ticketsCount, ticketsLimit]): void => {
+      .subscribe(([ticketsCount, ticketsLimit, ticketsSoldOut]): void => {
         this.ticketGenerationAvailability(ticketsCount, ticketsLimit, ticketsSoldOut);
       });
   }

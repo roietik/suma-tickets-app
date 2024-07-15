@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(this.user)
       .pipe(takeUntil(this.destroy))
       .subscribe(() => {
-        this.router.navigate(['./admin'])
+        this.router.navigate(['/admin'])
       })
   }
 
