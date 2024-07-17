@@ -6,6 +6,10 @@
   justify-content: center;
   height: 100vh;
 
+  .cover {
+    width: 100%
+  }
+
   .form-container {
     display: flex;
     flex-direction: column;
