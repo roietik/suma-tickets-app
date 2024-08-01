@@ -21,6 +21,13 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {ViewsModule} from './views/views.module';
+import {
+  RECAPTCHA_SETTINGS,
+  RecaptchaFormsModule,
+  RecaptchaModule,
+  RecaptchaSettings
+} from 'ng-recaptcha';
+import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -47,10 +54,18 @@ import {ViewsModule} from './views/views.module';
     MatFormField,
     MatInput,
     MatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useFactory: (): RecaptchaSettings => {
+        return { siteKey: environment.RECAPTCHA_V2 };
+      }
+    },
   ],
   bootstrap: [
     AppComponent

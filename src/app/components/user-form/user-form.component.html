@@ -26,7 +26,11 @@
                     <a href="../../../assets/regulamin.pdf" target="_blank">Regulamin</a>
                 </mat-checkbox>
 
-                <button type="submit" mat-raised-button color="primary" [disabled]="userForm.invalid || isTicketsLimit || isTicketsSoldOut">Wygeneruj bilet</button>
+                <re-captcha (resolved)="captchaResolved($event)"
+                            (errored)="captchaError($event)"
+                            errorMode="handled"/>
+
+                <button type="submit" mat-raised-button color="primary" [disabled]="userForm.invalid || isTicketsLimit || isTicketsSoldOut || !iCaptcha">Wygeneruj bilet</button>
                 <p class="form-alert" *ngIf="isTicketsSoldOut">Generowanie biletów została zablokowana przez organizatora</p>
                 <p class="form-alert" *ngIf="isTicketsLimit">Limit generowania biletów została wyczerpany</p>
             </form>

@@ -5,6 +5,7 @@ import {forkJoin, Observable, of, Subject, switchMap, takeUntil, tap} from 'rxjs
 import {TicketsService} from '../../services/tickets/tickets.service';
 import {EmailsService, SendEmail} from '../../services/emails/emails.service';
 import {NotifyService} from '../../services/notify/notify.service';
+import {RecaptchaErrorParameters} from 'ng-recaptcha';
 
 @Component({
   selector: 'user-form',
@@ -13,7 +14,7 @@ import {NotifyService} from '../../services/notify/notify.service';
 })
 export class UserFormComponent implements OnInit, OnDestroy {
 
-  TICKET_TITLE = "Suma Bilet 2024";
+  TICKET_TITLE = 'Suma Bilet 2024';
   TICKET_DESCRIPTION = '';
 
   userForm!: FormGroup;
@@ -21,6 +22,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   base64!: string;
   isTicketsLimit = false;
   isTicketsSoldOut = false;
+  iCaptcha!: boolean;
 
   private readonly destroy: Subject<void> = new Subject<void>();
 
@@ -28,7 +30,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     private readonly usersService: UsersService,
     private readonly ticketsService: TicketsService,
     private readonly emailsService: EmailsService,
-    private readonly notifyService: NotifyService
+    private readonly notifyService: NotifyService,
   ) {
   }
 
@@ -44,7 +46,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy)
       )
-      .subscribe((response) => {
+      .subscribe((response): void => {
         const fields = response;
         delete fields.statute;
         this.user = fields;
@@ -92,7 +94,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
           if (isEmailExist) {
             return of(null);
           }
-          return this.getTicket()
+          return this.getTicket();
         }),
         tap((base64): void => {
           if (!base64) {
@@ -132,6 +134,14 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   private sendMail(email: string, base64: string): Observable<SendEmail> {
     return this.emailsService.sendMail(email, base64);
+  }
+
+  captchaResolved(captchaResponse: string | null): void {
+    this.iCaptcha = !!(captchaResponse && captchaResponse.length > 0);
+  }
+
+  captchaError(errorDetails: RecaptchaErrorParameters): void {
+    throw new Error(`reCAPTCHA error encountered; details: ${errorDetails}`);
   }
 
   ngOnDestroy(): void {

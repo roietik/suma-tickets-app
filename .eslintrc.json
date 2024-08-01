@@ -36,6 +36,15 @@
         "no-multi-spaces": "error"
       }
     },
+		{
+			"files": [
+				"*.js"
+			],
+			"parser": "@typescript-eslint/parser",
+			"parserOptions": {
+				"sourceType": "module"
+			}
+		},
     {
       "files": [
         "*.html"

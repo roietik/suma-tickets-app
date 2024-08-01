@@ -26,6 +26,7 @@ import {TopMenuComponent} from './top-menu/top-menu.component';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatGridList, MatGridTile} from '@angular/material/grid-list';
+import {RecaptchaModule} from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import {MatGridList, MatGridTile} from '@angular/material/grid-list';
     MatIconButton,
     MatTooltip,
     MatGridList,
-    MatGridTile
+    MatGridTile,
+    RecaptchaModule
   ],
   exports: [
     ConfirmDialogComponent,

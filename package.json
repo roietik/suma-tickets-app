@@ -1,13 +1,15 @@
 {
   "name": "app",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve --disable-host-check --host 0.0.0.0 --port 3000",
-    "build": "ng build --configuration production",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
+    "env": "node -r dotenv/config src/environments/env.js",
+    "ng": "npm run env && ng",
+    "start": "npm run env && ng serve --disable-host-check --host 0.0.0.0 --port 3000",
+    "build": "npm run env && ng build --configuration production",
+    "watch": "npm run env && ng build --watch --configuration development",
+    "test": "npm run env && ng test",
+    "lint": "npm run env && ng lint"
   },
   "private": true,
   "dependencies": {
@@ -23,8 +25,10 @@
     "@angular/router": "^17.3.0",
     "@langchain/openai": "0.0.28",
     "cypress": "13.11.0",
+    "dotenv": "16.4.5",
     "html-to-pdfmake": "2.5.10",
     "jsbarcode": "3.11.6",
+    "ng-recaptcha": "13.2.1",
     "pdfmake": "0.2.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -39,6 +43,7 @@
     "@angular-eslint/template-parser": "17.3.0",
     "@angular/cli": "^17.3.4",
     "@angular/compiler-cli": "^17.3.0",
+    "@ngx-env/builder": "18.0.1",
     "@types/html-to-pdfmake": "2.4.4",
     "@types/jasmine": "~5.1.0",
     "@types/jquery": "3.5.29",

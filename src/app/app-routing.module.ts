@@ -10,12 +10,12 @@ export const routes: Routes = [
   { path: 'admin',
     component: AdminViewComponent,
     resolve: {
-      token: () => <Observable<boolean>>inject(AuthService).getToken()
+      token: (): Observable<boolean> => <Observable<boolean>>inject(AuthService).getToken()
     }
   },
   { path: 'ticket', component: TicketViewComponent },
   { path: 'login', component: LoginComponent },
-  { path: '',   redirectTo: '/ticket', pathMatch: 'full' },
+  { path: '', redirectTo: '/ticket', pathMatch: 'full' },
 ];
 
 @NgModule({
