@@ -25,7 +25,7 @@ export class EmailsService {
       ticketBase64: base64
     })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 }
