@@ -11,9 +11,9 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
-  user!: UserLogin
+  user!: UserLogin;
 
-  destroy: Subject<void> = new Subject<void>();
+  private readonly destroy: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly authService: AuthService,
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy)
       )
-      .subscribe((fields) => {
+      .subscribe((fields): void => {
         this.user = fields;
       });
   }
@@ -39,9 +39,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     this.authService.login(this.user)
       .pipe(takeUntil(this.destroy))
-      .subscribe(() => {
-        this.router.navigate(['/admin'])
-      })
+      .subscribe((): void => {
+        this.router.navigate(['/admin']);
+      });
   }
 
   ngOnDestroy(): void {
