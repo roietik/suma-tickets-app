@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import JsBarcode from 'jsbarcode';
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import {CustomPageSize, Margins, PageOrientation, TDocumentDefinitions} from 'pdfmake/interfaces';
 import {TICKET_IMAGE_BASE64} from './image-base64';
 import {concat, map, Observable, of, switchMap} from 'rxjs';
@@ -40,21 +40,21 @@ export class TicketsService {
   getTicket(ticketConfig: TicketConfig): Observable<string | null> {
     return this.getUniqueTicketId()
       .pipe(
-        map((uniqueId) => {
-          const documentConfig: DocumentConfig = {...ticketConfig, uniqueId: Number(uniqueId)}
+        map((uniqueId): DocumentConfig => {
+          const documentConfig: DocumentConfig = {...ticketConfig, uniqueId: Number(uniqueId)};
           return documentConfig;
         }),
-        switchMap((pdfConfig) => {
+        switchMap((pdfConfig): Observable<string | null> => {
           return this.getDocument(pdfConfig);
         }),
-        catchError((response) => this.handleErrorService.get(response))
-      )
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
+      );
   }
 
-  getUniqueTicketId(): Observable<string> {
-    return this.httpClient.get<string>(`${API_CONFIG.TICKETS}/unique-id`)
+  getUniqueTicketId(): Observable<number> {
+    return this.httpClient.get<number>(`${API_CONFIG.TICKETS}/unique-id`)
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
@@ -68,7 +68,7 @@ export class TicketsService {
 
     return concat(download$, base64$)
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
@@ -88,9 +88,9 @@ export class TicketsService {
   private getDocumentBase64(documentConfig: DocumentConfig): Observable<string | null> {
     const pdfDocGenerator = pdfMake.createPdf(this.createDocumentDefinition(documentConfig));
 
-    return new Observable<string>(observer => {
+    return new Observable<string>((observer): void => {
       try {
-        pdfDocGenerator.getBase64((base64: string) => {
+        pdfDocGenerator.getBase64((base64: string): void => {
           observer.next(base64);
           observer.complete();
         });
@@ -99,7 +99,7 @@ export class TicketsService {
       }
     })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
@@ -152,7 +152,7 @@ export class TicketsService {
           fontSize: 14,
         }
       }
-    }
+    };
   }
 
   private createBarCode(uniqueId: number): SVGElement {
@@ -190,15 +190,15 @@ export class TicketsService {
       ticketsLimit: ticketsLimit
     })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
   getTicketsLimit(): Observable<number> {
     return this.httpClient.get<string>(`${API_CONFIG.TICKETS}/limit`)
       .pipe(
-        map((response) => Number(response)),
-        catchError((response) => this.handleErrorService.get(response))
+        map((response): number => Number(response)),
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
@@ -206,22 +206,22 @@ export class TicketsService {
     return this.httpClient.post<boolean>(`${API_CONFIG.TICKETS}/sold-out`, {
       ticketsSoldOut: ticketsSoldOut
     }).pipe(
-      catchError((response) => this.handleErrorService.get(response))
+      catchError((response): Observable<never> => this.handleErrorService.get(response))
     );
   }
 
   getTicketsSoldOut(): Observable<boolean> {
     return this.httpClient.get<boolean>(`${API_CONFIG.TICKETS}/sold-out`)
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
   getTicketsCount(): Observable<number> {
     return this.httpClient.get<string>(`${API_CONFIG.TICKETS}/count`)
       .pipe(
-        map((response) => Number(response)),
-        catchError((response) => this.handleErrorService.get(response))
+        map((response): number => Number(response)),
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 }
