@@ -29,14 +29,14 @@ export class AuthService {
       withCredentials: true
     })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
   logout(): Observable<ResponseMessage> {
     return this.httpClient.post<ResponseMessage>(API_CONFIG.LOGOUT, {})
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
@@ -45,7 +45,7 @@ export class AuthService {
       withCredentials: true
     })
       .pipe(
-        catchError((error) => {
+        catchError((error): Observable<null> => {
           if (error.status === 404 || error.status === 401) {
             this.router.navigate(['./login']);
             return of(null);
@@ -53,7 +53,7 @@ export class AuthService {
           this.handleErrorService.get(error);
           throw Error(error);
         }),
-        map((token) => !!token)
+        map((token): boolean => !!token)
       );
   }
 }
