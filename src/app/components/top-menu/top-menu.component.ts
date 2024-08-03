@@ -9,7 +9,7 @@ import {Router} from '@angular/router';
   styleUrl: './top-menu.component.scss'
 })
 export class TopMenuComponent implements OnDestroy {
-  destroy: Subject<void> = new Subject<void>();
+  private readonly destroy: Subject<void> = new Subject<void>();
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
@@ -19,11 +19,12 @@ export class TopMenuComponent implements OnDestroy {
   logout(): void {
     this.authService.logout()
       .pipe(takeUntil(this.destroy))
-      .subscribe(() => {
-        this.router.navigate(['./login'])
-      })
+      .subscribe((): void => {
+        this.router.navigate(['./login']);
+      });
   }
 
   ngOnDestroy(): void {
+    this.destroy.next();
   }
 }
