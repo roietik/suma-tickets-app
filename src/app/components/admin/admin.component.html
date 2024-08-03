@@ -6,7 +6,12 @@
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <h2>Wygenerowano: {{ ticketsCount }} z {{ ticketsLimit }}</h2>
+            <h2>
+                Wygenerowano:
+                <span data-selector="tickets-count">{{ ticketsCount }}</span>
+                z
+                <span data-selector="tickets-limit">{{ ticketsLimit }}</span>
+            </h2>
 
             <form class="form-container" [formGroup]="adminForm" (ngSubmit)="setTicketsLimit()">
                 <mat-form-field appearance="fill">
@@ -16,6 +21,7 @@
 
                 <button type="submit"
                         mat-raised-button
+                        data-selector="click-tickets-limit"
                         color="primary">
                     Ustaw limit
                 </button>

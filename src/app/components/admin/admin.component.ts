@@ -15,7 +15,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ticketsLimit!: number;
   ticketsSoldOut!: boolean;
 
-  destroy: Subject<void> = new Subject<void>();
+  private readonly destroy: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly ticketsService: TicketsService
@@ -25,11 +25,11 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.adminForm = new FormGroup({
       ticketLimit: new FormControl()
-    })
+    });
 
     this.adminForm.valueChanges
       .pipe(takeUntil(this.destroy))
-      .subscribe((fields) => {
+      .subscribe((fields): void => {
         this.ticketsLimit = fields.ticketLimit;
       });
 
@@ -55,7 +55,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   setTicketsSoldOut(soldOut: boolean): void {
     this.ticketsService.setTicketsSoldOut(soldOut)
       .pipe(takeUntil(this.destroy))
-      .subscribe((response) => {
+      .subscribe((response): void => {
         this.ticketsSoldOut = response;
       });
   }
