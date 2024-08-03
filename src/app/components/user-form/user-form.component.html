@@ -30,9 +30,15 @@
                             (errored)="captchaError($event)"
                             errorMode="handled"/>
 
-                <button type="submit" mat-raised-button color="primary" [disabled]="userForm.invalid || isTicketsLimit || isTicketsSoldOut || !iCaptcha">Wygeneruj bilet</button>
-                <p class="form-alert" *ngIf="isTicketsSoldOut">Generowanie biletów została zablokowana przez organizatora</p>
-                <p class="form-alert" *ngIf="isTicketsLimit">Limit generowania biletów została wyczerpany</p>
+                <button type="submit" mat-raised-button color="primary" [disabled]="userForm.invalid || isTicketsLimit || isTicketsSoldOut || !isCaptcha">Wygeneruj bilet</button>
+                <p class="form-alert"
+                   data-selector="alert-ticket-sold-out"
+                   *ngIf="isTicketsSoldOut">
+                    Generowanie biletów została zablokowana przez organizatora
+                </p>
+                <p class="form-alert"
+                   data-selector="alert-tickets-limit"
+                   *ngIf="isTicketsLimit">Limit generowania biletów została wyczerpany</p>
             </form>
         </mat-card-content>
     </mat-card>
