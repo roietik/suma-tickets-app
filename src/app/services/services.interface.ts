@@ -22,3 +22,8 @@ export const API_CONFIG: ApiConfig = {
 export interface ResponseMessage {
   message: string;
 }
+
+export interface BaseGiven<W, T> {
+  when: W;
+  then: T;
+}
