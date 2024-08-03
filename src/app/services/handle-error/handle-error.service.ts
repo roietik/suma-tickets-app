@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
-import {throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {NotifyService} from '../notify/notify.service';
 
 @Injectable({
@@ -13,9 +13,8 @@ export class HandleErrorService {
   ) {
   }
 
-  get(response: HttpErrorResponse) {
-    console.log('err', response);
+  get(response: HttpErrorResponse): Observable<never> {
     this.notifyService.notifyError(response.error);
-    return throwError(() => new Error(response.error));
+    return throwError((): Error => new Error(response.error));
   }
 }
