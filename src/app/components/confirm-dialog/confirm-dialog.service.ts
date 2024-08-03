@@ -11,7 +11,6 @@ export class ConfirmDialogService {
   constructor(
     private readonly dialog: MatDialog
   ) {
-
   }
 
   openConfirmationDialog(): Observable<boolean> {
