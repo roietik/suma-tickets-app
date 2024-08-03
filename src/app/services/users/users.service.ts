@@ -26,21 +26,21 @@ export class UsersService {
   getAll(): Observable<User[]> {
     return this.httpClient.get<User[]>(API_CONFIG.USERS)
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
   create(user: User): Observable<User> {
     return this.httpClient.post<User>(API_CONFIG.USERS, { ...user })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 
   remove(id: number): void {
     this.httpClient.delete<User[]>(`${API_CONFIG.USERS}/${id}`)
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       )
       .subscribe();
   }
@@ -50,7 +50,7 @@ export class UsersService {
       email: email
     })
       .pipe(
-        catchError((response) => this.handleErrorService.get(response))
+        catchError((response): Observable<never> => this.handleErrorService.get(response))
       );
   }
 }

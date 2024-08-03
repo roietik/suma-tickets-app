@@ -5,13 +5,12 @@ import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'user-list',
-  templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss'
+  templateUrl: './user-list.component.html'
 })
 export class UserListComponent implements OnInit, OnDestroy {
   users!: User[];
 
-  destroy: Subject<void> = new Subject<void>();
+  private readonly destroy: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly usersService: UsersService,
@@ -29,7 +28,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   removeUser(id: number): void {
     this.confirmDialogService.openConfirmationDialog()
       .pipe(takeUntil(this.destroy))
-      .subscribe(() => {
+      .subscribe((): void => {
         this.usersService.remove(id);
       });
   }

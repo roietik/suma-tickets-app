@@ -22,7 +22,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   base64!: string;
   isTicketsLimit = false;
   isTicketsSoldOut = false;
-  iCaptcha!: boolean;
+  isCaptcha!: boolean;
 
   private readonly destroy: Subject<void> = new Subject<void>();
 
@@ -137,7 +137,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   captchaResolved(captchaResponse: string | null): void {
-    this.iCaptcha = !!(captchaResponse && captchaResponse.length > 0);
+    this.isCaptcha = !!(captchaResponse && captchaResponse.length > 0);
   }
 
   captchaError(errorDetails: RecaptchaErrorParameters): void {
