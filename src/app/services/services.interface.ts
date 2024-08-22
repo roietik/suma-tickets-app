@@ -27,3 +27,10 @@ export interface BaseGiven<W, T> {
   when: W;
   then: T;
 }
+
+export interface PagingData<T> {
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  collection: T[];
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {API_CONFIG} from '../services.interface';
+import {API_CONFIG, PagingData} from '../services.interface';
 import {catchError} from 'rxjs/operators';
 import {HandleErrorService} from '../handle-error/handle-error.service';
 
@@ -23,8 +23,8 @@ export class UsersService {
   ) {
   }
 
-  getAll(): Observable<User[]> {
-    return this.httpClient.get<User[]>(API_CONFIG.USERS)
+  getAll(): Observable<PagingData<User>> {
+    return this.httpClient.get<PagingData<User>>(API_CONFIG.USERS)
       .pipe(
         catchError((response): Observable<never> => this.handleErrorService.get(response))
       );

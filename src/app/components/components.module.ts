@@ -3,7 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
+import {MatAnchor, MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {
@@ -70,7 +70,8 @@ import {RecaptchaModule} from 'ng-recaptcha';
     MatTooltip,
     MatGridList,
     MatGridTile,
-    RecaptchaModule
+    RecaptchaModule,
+    MatAnchor
   ],
   exports: [
     ConfirmDialogComponent,

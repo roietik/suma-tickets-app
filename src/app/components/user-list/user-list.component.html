@@ -1,4 +1,11 @@
-<!--TODO ADMIN-VIEW with pagination-->
-<div *ngFor="let user of users">
-    <pre>{{ user.firstName }}, {{ user.lastName }}, {{ user.email }} <button (click)="removeUser(user.id)">remove</button></pre>
+<!--TODO Add table with pagination and filters-->
+<!--TODO Fix styles for admin top menu-->
+<div style="position: relative; top: 60px">
+    <div style="display: flex; align-items: baseline;"
+         *ngFor="let user of users">
+        <pre style="padding-right: 4px"> {{ user.firstName }}, {{ user.lastName }}, {{ user.email }} </pre>
+        <button (click)="removeUser(user.id)">remove</button>
+    </div>
+    <pre>TotalItems: {{ totalItems }}, TotalPages: {{ totalPages }}, CurrentPage: {{ currentPage }}</pre>
 </div>
+

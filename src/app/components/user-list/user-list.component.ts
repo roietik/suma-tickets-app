@@ -9,6 +9,9 @@ import {Subject, takeUntil} from 'rxjs';
 })
 export class UserListComponent implements OnInit, OnDestroy {
   users!: User[];
+  totalItems!: number;
+  totalPages!: number;
+  currentPage!: number;
 
   private readonly destroy: Subject<void> = new Subject<void>();
 
@@ -20,8 +23,11 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.usersService.getAll()
-      .subscribe((users): void => {
-        this.users = users;
+      .subscribe(({collection, totalItems, totalPages, currentPage}): void => {
+        this.users = collection;
+        this.totalItems = totalItems;
+        this.totalPages = totalPages;
+        this.currentPage = currentPage;
       });
   }
 

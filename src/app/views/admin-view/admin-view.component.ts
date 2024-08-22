@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './admin-view.component.html',
   styleUrl: './admin-view.component.scss'
 })
-export class AdminViewComponent implements  OnInit {
+export class AdminViewComponent implements OnInit {
   isToken!: boolean;
 
   constructor(
